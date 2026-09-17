@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Date Widget</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #fdecc8;        /* upper tile — matches Notion's yellow highlight */
+    --yellow-dark: #fbe3ac;   /* lower half, a touch deeper */
+    --label: rgba(151, 109, 24, 0.9);
+    --bg: #ffffff;         /* page behind the tiles */
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Inter', sans-serif;
+    display: grid;
+    place-items: center;
+  }
+
+  .tiles {
+    display: flex;
+    gap: 10px;
+  }
+
+  .tile {
+    position: relative;
+    width: 90px;
+    height: 100px;
+    border-radius: 14px;
+    background: linear-gradient(to bottom, var(--yellow) 0 55%, var(--yellow-dark) 55% 100%);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* the flip-clock seam */
+  .tile::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    top: 55%;
+    height: 1.5px;
+    background: rgba(0, 0, 0, 0.14);
+  }
+
+  .num {
+    color: #7a5711;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-top: 4px;
+  }
+
+  .label {
+    color: var(--label);
+    font-size: 0.55rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+  <div class="tiles">
+    <div class="tile">
+      <div class="num" id="dayNum"></div>
+      <div class="label" id="weekday"></div>
+    </div>
+    <div class="tile">
+      <div class="num" id="monthNum"></div>
+      <div class="label" id="monthName"></div>
+    </div>
+  </div>
+
+<script>
+  function render() {
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+
+    document.getElementById('dayNum').textContent = pad(now.getDate());
+    document.getElementById('weekday').textContent =
+      now.toLocaleDateString('en-IE', { weekday: 'long' });
+
+    document.getElementById('monthNum').textContent = pad(now.getMonth() + 1);
+    document.getElementById('monthName').textContent =
+      now.toLocaleDateString('en-IE', { month: 'long' });
+  }
+
+  render();
+  setInterval(render, 60 * 1000); // rolls over at midnight
+</script>
+</body>
+</html>
